@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sorting Algorithm Web App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function mergeSort(arr) {
+            if (arr.length <= 1) return arr;
+            let mid = Math.floor(arr.length / 2);
+            let left = mergeSort(arr.slice(0, mid));
+            let right = mergeSort(arr.slice(mid));
+            return merge(left, right);
+        }
+
+        function merge(left, right) {
+            let result = [], i = 0, j = 0;
+            while (i < left.length && j < right.length) {
+                if (left[i] < right[j]) result.push(left[i++]);
+                else result.push(right[j++]);
+            }
+            return result.concat(left.slice(i)).concat(right.slice(j));
+        }
+
+        function quickSort(arr) {
+            if (arr.length <= 1) return arr;
+            let pivot = arr[arr.length - 1];
+            let left = arr.slice(0, -1).filter(el => el < pivot);
+            let right = arr.slice(0, -1).filter(el => el >= pivot);
+            return [...quickSort(left), pivot, ...quickSort(right)];
+        }
+
+        function sortNumbers() {
+            let numbers = document.getElementById('numbers').value;
+            let algorithm = document.getElementById('algorithm').value;
+            let numArray = numbers.split(' ').map(Number).filter(n => !isNaN(n));
+            
+            let sortedArray = (algorithm === "Merge Sort") ? mergeSort(numArray) : quickSort(numArray);
+            document.getElementById('result').innerText = "Sorted Array: " + sortedArray.join(', ');
+        }
+    </script>
+</head>
+<body>
+    <h2>Enter numbers to sort (space-separated):</h2>
+    <input type="text" id="numbers" required>
+    <br><br>
+    <label for="algorithm">Choose Algorithm:</label>
+    <select id="algorithm">
+        <option value="Merge Sort">Merge Sort</option>
+        <option value="Quick Sort">Quick Sort</option>
+    </select>
+    <br><br>
+    <button onclick="sortNumbers()">Sort</button>
+    <h3 id="result"></h3>
+</body>
+</html>
